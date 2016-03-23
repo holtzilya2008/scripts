@@ -1,0 +1,7 @@
+#!/bin/bash
+#
+#This script will launch my prefered browser form with a url givven as $1
+#
+
+browser="firefox"
+$browser $1

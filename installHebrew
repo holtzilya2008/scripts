@@ -1,0 +1,8 @@
+#!/bin/bash
+aptitude update 
+aptitude install openoffice.org-l10n-he -y
+aptitude install hspell hspell-gui -y
+aptitude install emacs-intl-fonts -y
+aptitude install koffice-i18n-he -y
+cd ~/Documents/HebrewFonts
+./installHebFonts

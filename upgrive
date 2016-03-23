@@ -1,0 +1,17 @@
+#!/bin/bash
+#
+# A manual update command for grive.
+#
+
+cd ~/gDrive
+echo "The Execution of Grive at this point will make the following changes: "
+grive --dry-run
+read -r -p "Do you want to proseed with these changes <y/n> ? " ans
+echo
+
+if  [[ "$ans" == "y" ]]; then
+    echo "Executing grive ..."
+    grive
+else
+    echo "No changes will be made. Good bye!"
+fi 

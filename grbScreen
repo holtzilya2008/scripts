@@ -1,0 +1,4 @@
+#!/bin/bash
+_now=$(date +"%Y%m%d_%H%M%S")
+_file="screens/scr$_now.png"
+gnome-screenshot -a -f $_file 

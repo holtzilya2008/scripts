@@ -1,0 +1,52 @@
+#!/bin/bash
+#
+# a script that runs xdotool mousemove 
+#
+
+SCREEN_TOP=0
+SCREEN_BOTTOM=1050
+SCREEN_RIGHT=1680
+SCREEN_LEFT=0
+
+
+arg1=0
+arg2=0
+
+case $1 in
+    left)
+        arg1=$SCREEN_LEFT
+        echo 'arg1 is SCREEN_LEFT' 
+        ;;
+    right)
+        arg1=$SCREEN_RIGHT
+        echo 'arg1 is SCREEN_RIGHT'
+        ;;
+    center)
+        arg1=$((SCREEN_RIGHT/2))
+        echo 'arg1 is SCREEN_CENTER'
+        ;;
+    *)
+        arg1=0
+        echo 'arg1 is undefined'
+esac
+
+case $2 in
+    top)
+        arg2=$SCREEN_TOP
+        echo 'arg2 is SCREEN_TOP'
+        ;;
+    bottom)
+        arg2=$SCREEN_BOTTOM
+        echo 'arg2 is SCREEN_BOTTOM'
+        ;;
+    center)
+        arg2=$((SCREEN_BOTTOM/2))
+        echo 'arg2 is CENTER'
+        ;;
+    *)
+        arg2=0
+        echo 'arg2 is undefined!'
+esac
+
+echo "$arg1 $arg2"
+xdotool mousemove $arg1 $arg2
