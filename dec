@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# A manual update command for grive.
+# A simple command for AES-cbc decription of a file, using openssl
 #
 
 openssl aes-256-cbc -d -in $1 -out $2
