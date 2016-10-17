@@ -198,7 +198,7 @@ if echo "$answer" | grep -iq "^y" ;then
     /bin/echo  "Installing necessary packages"
 fi
 
-echo -n "Would you like to prepare your (amd64) system to Android development? (y/n)? "
+echo -n "Would you like to prepare your (amd64) system for Android development? (y/n)? "
 read answer
 if echo "$answer" | grep -iq "^y" ;then
 
