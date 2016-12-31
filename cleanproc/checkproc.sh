@@ -1,10 +1,12 @@
 #! /bin/bash
 
+whitelist_path="... add our path wor the whitelist ..."
+echo "WARNING: The following processes are not in your whitelist:"
 while read line
 do
-  found=$(grep $line ./whitelist.txt)
+  found=$(grep $line $whitelist_path/whitelist.txt)
   if  [[ "$found" == "" ]]; then
-    	echo "WARNING! the process:" $line "is not recognized!"
+    	echo $line
   fi 
 done
 

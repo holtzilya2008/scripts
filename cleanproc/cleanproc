@@ -1,7 +1,7 @@
 #! /bin/bash
-#! /bin/bash
 
 # This script list all processes on the system using ps command, 
 # and then checks each process if it exists in the whitelist.
 
-watch -n1 "ps -eo comm | ./checkproc.sh"
+checkproc_path="... add your path to the checkproc.sh script ..."
+watch -n1 "ps -eo comm | $checkproc_path/checkproc.sh"
