@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# vlc Resume 
+#
+# For some reason you need to stop playing an interesting movie, but you want
+# to continue from the same point next time. 
+# Write the path to the video, the video file name and the desired time bellow.
+# When you want to resume watching, just run the script :)
+
+videoPath="... /home/username/Downloads/ ..."
+videoFile="... myMovie.mp4 ..."
+startTime="01:05:20"
+
+# vlc script
+startTimeSeconds=`echo $startTime | awk -F':' '{print $1 * 60 * 60 + $2 * 60 + $3}'`
+cd "${videoPath}"
+vlc --start-time=$startTimeSeconds $videoFile
