@@ -14,3 +14,10 @@ augroup vimrc_autocmds
     autocmd BufEnter * match ColorColumn /\%>80v.\+/
 augroup END
 
+
+filetype plugin on
+
+let g:pydiction_location = '/home/$USER/.vim/bundle/pydiction/complete-dict'
+
+let g:pydiction_menu_height = 3
+
