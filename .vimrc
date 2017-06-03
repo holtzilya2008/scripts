@@ -1,5 +1,6 @@
 syntax on
 set modeline
+set number
 set mouse=a
 set shiftwidth=4
 set tabstop=4
