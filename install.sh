@@ -215,9 +215,9 @@ if echo "$answer" | grep -iq "^y" ;then
     echo -n "Would you like to install terminal color scheme for srcery-dark? (y/n)? "
     read answer_color
     if echo "$answer_color" | grep -iq "^y" ;then
-        chmod 700 /home/$USER/.vim/bundle/vim-srcery-drk/term_colors/gnome_terminal.sh
-        sh /home/$USER/.vim/bundle/vim-srcery-drk/term_colors/gnome_terminal.sh
-        chmod 600 /home/$USER/.vim/bundle/vim-srcery-drk/term_colors/gnome_terminal.sh
+        chmod 700 /home/$USER1/.vim/bundle/vim-srcery-drk/term_colors/gnome_terminal.sh
+        sh /home/$USER1/.vim/bundle/vim-srcery-drk/term_colors/gnome_terminal.sh
+        chmod 600 /home/$USER1/.vim/bundle/vim-srcery-drk/term_colors/gnome_terminal.sh
     fi
     echo "Please change font in your teminal to patched one, for example Roboto Mono"
 
