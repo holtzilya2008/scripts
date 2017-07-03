@@ -199,6 +199,13 @@ if echo "$answer" | grep -iq "^y" ;then
 
     /bin/echo  "Installing packages"
     aptitude -y install git vim tmux
+
+    echo "Linking configs for vim"
+    DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    ln -s $DIR/.vim ~/.vim
+    ln -s $DIR/.vimrc ~/.vimrc
+
+    echo "Installing vim plugin management system"
     git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
     vim +PluginInstall +qall
 
