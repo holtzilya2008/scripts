@@ -147,45 +147,40 @@ if echo "$answer" | grep -iq "^y" ;then
     /bin/echo  "Removing unnecessary packages"
     aptitude -y purge nepomuk empathy empathy-common evolution evolution-common \
     gbrainy gnome-screensaver libubuntuone-1.0-1 nautilus-sendto-empathy \
-    nautilus-share \
-    popularity-contest \
-    python-ubuntuone \
-    python-ubuntuone-client \
-    python-ubuntuone-storageprotocol \
-    rhythmbox \
-    rhythmbox-plugin-cdrecorder \
-    rhythmbox-plugins \
-    rhythmbox-ubuntuone-music-store \
-    ubuntu-desktop \
-    ubuntu-standard \
-    ubuntuone-client \
-    ubuntuone-client-gnome \
-    gwibber \
-    gwibber-service \
-    rdesktop \
-    telepathy-client \
-    vinagre \
+    nautilus-share popularity-contest \
+    python-ubuntuone python-ubuntuone-client \
+    python-ubuntuone-storageprotocol rhythmbox rhythmbox-plugin-cdrecorder \
+    rhythmbox-plugins rhythmbox-ubuntuone-music-store \
+    ubuntu-desktop ubuntu-standard ubuntuone-client ubuntuone-client-gnome \
+    gwibber gwibber-service rdesktop telepathy-client vinagre \
     gnome-sudoku gnome-mahjongg quadrapassel aisleriot gnomine tomboy ufw \
-    rhythmbox-plugin-cdrecorder \
-    rhythmbox-plugin-magnatune \
-    rhythmbox-mozilla \
-    ubuntu-gnome-desktop \
-    evolution-indicator \
-    evolution-plugins \
-    mcp-account-manager-goa \
-    rhythmbox-mozilla \
-    rhythmbox-plugin-magnatune \
-    rhythmbox-plugin-zeitgeist \
-    totem-plugins mono-complete printer-driver-all samba bluez-tools bluez bluetooth \
-    telepathy-mission-control-5 skanlite telepathy-gabble telepathy-haze telepathy-logger \
-    pulseaudio-module-bluetooth bluedevil brltty bluez-alsa akregator bluez-cups cracklib-runtime \
-    cups-browsed cups-bsd dc dnsutils dragonplayer enchant ethtool ftp hplip ibus-qt4 icoutils\
-    iproute kde-config-telepathy-accounts kde-telepathy-approver kde-telepathy-auth-handler\
-    kde-telepathy-contact-list kde-telepathy-data kde-telepathy-declarative kde-telepathy-desktop-applets kde-telepathy-filetransfer-handler kde-telepathy-integration-module kde-telepathy-send-file kde-telepathy-text-ui kdenetwork-filesharing khelpcenter4 kmag kmail krdc kubuntu-docs kubuntu-restricted-addons libavahi-gobject0 libkpeople3 libktpcommoninternalsprivate7 libqaccessibilityclient0 libqtglib-2.0-0 libtelepathy-logger-qt4-1 libtelepathy-logger3 libtelepathy-qt4-2 libvirtodbc0 libvncserver0 mplayer2 mscompress plasma-runner-telepathy-contact printer-driver-c2esp printer-driver-foo2zjs printer-driver-foo2zjs-common printer-driver-gutenprint printer-driver-hpcups printer-driver-min12xxw printer-driver-pnm2ppa printer-driver-postscript-hp printer-driver-ptouch printer-driver-pxljr printer-driver-sag-gdi printer-driver-splix samba-common samba-common-bin smbclient telepathy-salut toshset virtuoso-minimal virtuoso-opensource-6.1-bin virtuoso-opensource-6.1-common gufw hexchat pidgin
-
+    rhythmbox-plugin-cdrecorder rhythmbox-plugin-magnatune rhythmbox-mozilla \
+    ubuntu-gnome-desktop evolution-indicator evolution-plugins \
+    mcp-account-manager-goa rhythmbox-mozilla rhythmbox-plugin-magnatune \
+    rhythmbox-plugin-zeitgeist totem-plugins mono-complete printer-driver-all \
+    samba bluez-tools bluez bluetooth telepathy-mission-control-5 skanlite \
+    telepathy-gabble telepathy-haze telepathy-logger \
+    pulseaudio-module-bluetooth bluedevil brltty bluez-alsa akregator \
+    bluez-cups cracklib-runtime cups-browsed cups-bsd dc dnsutils \
+    dragonplayer enchant ethtool ftp hplip ibus-qt4 icoutils \
+    iproute kde-config-telepathy-accounts kde-telepathy-approver \
+    kde-telepathy-auth-handler kde-telepathy-contact-list kde-telepathy-data \
+    kde-telepathy-declarative kde-telepathy-desktop-applets \
+    kde-telepathy-filetransfer-handler kde-telepathy-integration-module \
+    kde-telepathy-send-file kde-telepathy-text-ui kdenetwork-filesharing \
+    khelpcenter4 kmag kmail krdc kubuntu-docs kubuntu-restricted-addons \
+    libavahi-gobject0 libkpeople3 libktpcommoninternalsprivate7 \
+    libqaccessibilityclient0 libqtglib-2.0-0 libtelepathy-logger-qt4-1 \
+    libtelepathy-logger3 libtelepathy-qt4-2 libvirtodbc0 libvncserver0 \
+    mplayer2 mscompress plasma-runner-telepathy-contact printer-driver-c2esp \
+    printer-driver-foo2zjs printer-driver-foo2zjs-common \
+    printer-driver-gutenprint printer-driver-hpcups printer-driver-min12xxw \
+    printer-driver-pnm2ppa printer-driver-postscript-hp printer-driver-ptouch \
+    printer-driver-pxljr printer-driver-sag-gdi printer-driver-splix \
+    samba-common samba-common-bin smbclient telepathy-salut toshset \
+    virtuoso-minimal virtuoso-opensource-6.1-bin0 \
+    virtuoso-opensource-6.1-common gufw hexchat pidgin
 fi
-
-
 
 echo -n "Would you like to install any .deb packages from folder ~/Programs (if any) ? (y/n)? "
 read answer
@@ -198,12 +193,52 @@ if echo "$answer" | grep -iq "^y" ;then
     /bin/echo  "Installing necessary packages"
 fi
 
+echo -n "Would you like to prepare your system for development with vim? (y/n)? "
+read answer
+if echo "$answer" | grep -iq "^y" ;then
+
+    /bin/echo  "Installing packages"
+    aptitude -y install git vim tmux
+    git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+    vim +PluginInstall +qall
+
+    echo "Installing patched fonts for vim-airline."
+    git clone https://github.com/powerline/fonts ~/.fonts
+
+    echo -n "Would you like to install terminal color scheme for srcery-dark? (y/n)? "
+    read answer_color
+    if echo "$answer_color" | grep -iq "^y" ;then
+        chmod 700 /home/$USER/.vim/bundle/vim-srcery-drk/term_colors/gnome_terminal.sh
+        sh /home/$USER/.vim/bundle/vim-srcery-drk/term_colors/gnome_terminal.sh
+        chmod 600 /home/$USER/.vim/bundle/vim-srcery-drk/term_colors/gnome_terminal.sh
+    fi
+    echo "Please change font in your teminal to patched one, for example Roboto Mono"
+
+    echo -n "Would you like to install command to run vim inside tmux? (y/n)? "
+    read answer_vim
+    if echo "$answer_vim" | grep -iq "^y" ;then
+
+        /bin/echo "    vide () {
+            tmux -u new-session -n code \; \
+                        send-keys 'vim' C-m \; \
+                                split-window -v -p 5 \;
+             }" >> ~/.bashrc
+        /bin/echo "From now, type vide in bash and this will run splitted tmux"
+
+    fi
+
+    /bin/echo "source ~/.shell_prompt.sh" >> ~/.bashrc
+    /bin/echo -n "Promptline plugin theme for bash installed."
+    /bin/echo "To change prompt colorscheme to same as airline, run:"
+    /bin/echo 'vim -c "PromptlineSnapshot ~/.shell_prompt.sh airline"'
+fi
+
 echo -n "Would you like to prepare your (amd64) system for Android development? (y/n)? "
 read answer
 if echo "$answer" | grep -iq "^y" ;then
 
     /bin/echo  "Installing java packages"
-    add-apt-repository ppa:webupd8team/java 
+    add-apt-repository ppa:webupd8team/java
 
     /bin/echo  "Installing necessary i386 libs"
     dpkg --add-architecture i386 &&
@@ -214,7 +249,6 @@ if echo "$answer" | grep -iq "^y" ;then
     /bin/echo  "Installing git"
     aptitude -y install git
 fi
-
     #aptitude -y install texmaker g++ \
     #vlc unrar gstreamer0.10-ffmpeg \
     #gstreamer0.10-plugins-good   \
@@ -224,8 +258,6 @@ fi
     #/bin/echo 'deb http://download.virtualbox.org/virtualbox/debian trusty contrib' >> /etc/apt/sources.list
     #aptitude -y update
     #aptitude -y install virtualbox-5.0
-
-
 
 /bin/echo  "Installing all updates for packages"
 aptitude -y safe-upgrade
