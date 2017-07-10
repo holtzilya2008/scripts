@@ -6,6 +6,7 @@ set tabstop=4
 set softtabstop=4
 set expandtab
 set autoindent
+set smartindent
 set number
 
 "For every buffer entering, highlight lines, that have length over 80
@@ -57,4 +58,8 @@ filetype plugin indent on
 filetype plugin on
 
 colorscheme srcery-drk
+
+set encoding=utf-8
+set fileencoding=utf-8
+set fileformat=unix
 

@@ -202,7 +202,6 @@ if echo "$answer" | grep -iq "^y" ;then
 
     echo "Linking configs for vim"
     DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    ln -s $DIR/.vim ~/.vim
     ln -s $DIR/.vimrc ~/.vimrc
 
     echo "Installing vim plugin management system"
