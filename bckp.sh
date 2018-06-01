@@ -16,10 +16,19 @@ fi
 
 
 if [ -d "$dstdir" ]; then
+    
     tar -cpjfW $tmpdir/$filename $srcdir
-    openssl aes-256-cbc -in $tmpdir/$filename -out $tmpdir/$filename.enc
+
+    # random iv to keep along with encrypted file
+    echo $RANDOM | md5sum | cut -d' ' -f1 > $dstdir/iv
+
+    openssl aes-256-cbc -md sha256 -iv $(cat $dstdir/iv) -in $tmpdir/$filename -out $tmpdir/$filename.enc
+
     rm -f $tmpdir/$filename
+
     mv $tmpdir/$filename.enc $dstdir/$filename.enc
+
+    sha512sum $dstdir/$filename.enc > $dstdir/$filename.enc.sha512
 else
     echo "$dstdir not a directory."
     echo $usage
