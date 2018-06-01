@@ -20,88 +20,98 @@ if echo "$answer" | grep -iq "^y" ;then
 
      /bin/echo '#! /bin/sh
 
+### BEGIN INIT INFO
+# Provides: firewall
+# Required-Start: iptables
+# Required-Stop:
+# Default-Start: 34 2 3 4 5 .
+# Default-Stop:
+# Short-Description: Simple firewall setup
+# Description: Simple firewall setup script. This script adding rules to firewall, stop icmp and turn off forwarding.
+### END INIT INFO
 
-     /bin/echo "1" > /proc/sys/net/ipv4/icmp_echo_ignore_all
-     /bin/echo "1" > /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts
-     /bin/echo "0" > /proc/sys/net/ipv4/conf/all/accept_source_route
-     /bin/echo "0" > /proc/sys/net/ipv4/conf/all/accept_redirects
-     /bin/echo "0" > /proc/sys/net/ipv4/conf/all/secure_redirects
-     /bin/echo "1" > /proc/sys/net/ipv4/icmp_ignore_bogus_error_responses
-     /bin/echo "0" > /proc/sys/net/ipv4/conf/all/log_martians
-     /bin/echo "0" > /proc/sys/net/ipv4/ip_forward
+/bin/echo "1" > /proc/sys/net/ipv4/icmp_echo_ignore_all
+/bin/echo "1" > /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts
+/bin/echo "0" > /proc/sys/net/ipv4/conf/all/accept_source_route
+/bin/echo "0" > /proc/sys/net/ipv4/conf/all/accept_redirects
+/bin/echo "0" > /proc/sys/net/ipv4/conf/all/secure_redirects
+/bin/echo "1" > /proc/sys/net/ipv4/icmp_ignore_bogus_error_responses
+/bin/echo "0" > /proc/sys/net/ipv4/conf/all/log_martians
+/bin/echo "0" > /proc/sys/net/ipv4/ip_forward
 
-     for i in /proc/sys/net/ipv4/conf/*; do
-            /bin/echo "1" > $i/rp_filter
-     done
-
-
-     IPT=/sbin/iptables
-
-
-      # Flushing all rules,deleting all chains
-      $IPT -F
-      $IPT -X
-
-      # Setting default rule to drop
-      $IPT -P INPUT DROP
-      $IPT -P FORWARD DROP
-      $IPT -P OUTPUT ACCEPT
+for i in /proc/sys/net/ipv4/conf/*; do
+    /bin/echo "1" > $i/rp_filter
+done
 
 
-      $IPT -N invalid
-      $IPT -N attacks
-      $IPT -N allowed
+IPT=/sbin/iptables
 
 
-      $IPT -F invalid
-      $IPT -F attacks
-      $IPT -F allowed
+# Flushing all rules,deleting all chains
+$IPT -F
+$IPT -X
+
+# Setting default rule to drop
+$IPT -P INPUT DROP
+$IPT -P FORWARD DROP
+$IPT -P OUTPUT ACCEPT
 
 
-      $IPT -A invalid -p icmp -j DROP
+$IPT -N invalid
+$IPT -N attacks
+$IPT -N allowed
 
-      $IPT -A invalid -m state --state INVALID -j DROP
-      $IPT -A invalid -m state --state NEW     -j DROP
+
+$IPT -F invalid
+$IPT -F attacks
+$IPT -F allowed
 
 
-      # Log (currently off) and then drop strange packets
-      #$IPT -A attacks -p tcp --tcp-flags ALL              FIN,URG,PSH         -m limit --limit 15/minute -j LOG  --log-prefix "NMAP-XMAS:"
-      $IPT -A attacks -p tcp --tcp-flags ALL              FIN,URG,PSH         -j DROP
-      #$IPT -A attacks -p tcp --tcp-flags ALL              ALL                 -m limit --limit 15/minute -j LOG  --log-prefix "XMAS:"
-      $IPT -A attacks -p tcp --tcp-flags ALL              ALL                 -j DROP
-      #$IPT -A attacks -p tcp --tcp-flags ALL              SYN,RST,ACK,FIN,URG -m limit --limit 15/minute -j LOG  --log-prefix "XMAS-PSH:"
-      $IPT -A attacks -p tcp --tcp-flags ALL              SYN,RST,ACK,FIN,URG -j DROP
-      #$IPT -A attacks -p tcp --tcp-flags ALL              NONE                -m limit --limit 15/minute -j LOG  --log-prefix "NULL-SCAN:"
-      $IPT -A attacks -p tcp --tcp-flags ALL              NONE                -j DROP
-      #$IPT -A attacks -p tcp --tcp-flags ALL              SYN,RST             -m limit --limit 15/minute -j LOG  --log-prefix "SYN-RST:"
-      $IPT -A attacks -p tcp --tcp-flags ALL              SYN,RST             -j DROP
-      #$IPT -A attacks -p tcp --tcp-flags ALL              SYN,FIN             -m limit --limit 15/minute -j LOG  --log-prefix "SYN-FIN:"
-      $IPT -A attacks -p tcp --tcp-flags ALL              SYN,FIN             -j DROP
-      #$IPT -A attacks -p tcp --tcp-flags ALL              FIN,RST             -m limit --limit 15/minute -j LOG  --log-prefix "FIN-RST:"
-      $IPT -A attacks -p tcp --tcp-flags ALL              FIN,RST             -j DROP
-      #$IPT -A attacks -p tcp --tcp-flags ALL              FIN                 -m limit --limit 15/minute -j LOG  --log-prefix "FIN-SCAN:"
-      $IPT -A attacks -p tcp --tcp-flags ALL              FIN                 -j DROP
-      #$IPT -A attacks -p tcp --tcp-flags SYN,ACK          SYN                 -m limit --limit 15/minute -j LOG  --log-prefix "SYN-!ACK:"
-      $IPT -A attacks -p tcp --tcp-flags SYN,ACK          SYN                 -j DROP
-      #$IPT -A attacks -p tcp --tcp-flags FIN,ACK          FIN                 -m limit --limit 15/minute -j LOG  --log-prefix "FIN-!ACK:"
-      $IPT -A attacks -p tcp --tcp-flags FIN,ACK          FIN                 -j DROP
-      #$IPT -A attacks -p tcp --tcp-flags ALL              PSH                 -m limit --limit 15/minute -j LOG  --log-prefix "PSH-SCAN:"
-      $IPT -A attacks -p tcp --tcp-flags ALL              PSH                 -j DROP
+$IPT -A invalid -p icmp -j DROP
 
-      #Allowed incoming traffic is related and established connections
-      $IPT -A allowed -m state --state ESTABLISHED,RELATED -j ACCEPT
-      $IPT -A allowed -j RETURN
+$IPT -A invalid -m state --state INVALID -j DROP
+$IPT -A invalid -m state --state NEW     -j DROP
 
-      $IPT -A INPUT -i lo -j ACCEPT
-      $IPT -A INPUT -j attacks
-      $IPT -A INPUT -j invalid
-      $IPT -A INPUT -j allowed
 
-      $IPT -A OUTPUT -p icmp -j DROP
+# Log (currently off) and then drop strange packets
+#$IPT -A attacks -p tcp --tcp-flags ALL              FIN,URG,PSH         -m limit --limit 15/minute -j LOG  --log-prefix "NMAP-XMAS:"
+$IPT -A attacks -p tcp --tcp-flags ALL              FIN,URG,PSH         -j DROP
+#$IPT -A attacks -p tcp --tcp-flags ALL              ALL                 -m limit --limit 15/minute -j LOG  --log-prefix "XMAS:"
+$IPT -A attacks -p tcp --tcp-flags ALL              ALL                 -j DROP
+#$IPT -A attacks -p tcp --tcp-flags ALL              SYN,RST,ACK,FIN,URG -m limit --limit 15/minute -j LOG  --log-prefix "XMAS-PSH:"
+$IPT -A attacks -p tcp --tcp-flags ALL              SYN,RST,ACK,FIN,URG -j DROP
+#$IPT -A attacks -p tcp --tcp-flags ALL              NONE                -m limit --limit 15/minute -j LOG  --log-prefix "NULL-SCAN:"
+$IPT -A attacks -p tcp --tcp-flags ALL              NONE                -j DROP
+#$IPT -A attacks -p tcp --tcp-flags ALL              SYN,RST             -m limit --limit 15/minute -j LOG  --log-prefix "SYN-RST:"
+$IPT -A attacks -p tcp --tcp-flags ALL              SYN,RST             -j DROP
+#$IPT -A attacks -p tcp --tcp-flags ALL              SYN,FIN             -m limit --limit 15/minute -j LOG  --log-prefix "SYN-FIN:"
+$IPT -A attacks -p tcp --tcp-flags ALL              SYN,FIN             -j DROP
+#$IPT -A attacks -p tcp --tcp-flags ALL              FIN,RST             -m limit --limit 15/minute -j LOG  --log-prefix "FIN-RST:"
+$IPT -A attacks -p tcp --tcp-flags ALL              FIN,RST             -j DROP
+#$IPT -A attacks -p tcp --tcp-flags ALL              FIN                 -m limit --limit 15/minute -j LOG  --log-prefix "FIN-SCAN:"
+$IPT -A attacks -p tcp --tcp-flags ALL              FIN                 -j DROP
+#$IPT -A attacks -p tcp --tcp-flags SYN,ACK          SYN                 -m limit --limit 15/minute -j LOG  --log-prefix "SYN-!ACK:"
+$IPT -A attacks -p tcp --tcp-flags SYN,ACK          SYN                 -j DROP
+#$IPT -A attacks -p tcp --tcp-flags FIN,ACK          FIN                 -m limit --limit 15/minute -j LOG  --log-prefix "FIN-!ACK:"
+$IPT -A attacks -p tcp --tcp-flags FIN,ACK          FIN                 -j DROP
+#$IPT -A attacks -p tcp --tcp-flags ALL              PSH                 -m limit --limit 15/minute -j LOG  --log-prefix "PSH-SCAN:"
+$IPT -A attacks -p tcp --tcp-flags ALL              PSH                 -j DROP
 
-      $IPT-save
+#Allowed incoming traffic is related and established connections
+$IPT -A allowed -m state --state ESTABLISHED,RELATED -j ACCEPT
+$IPT -A allowed -j RETURN
 
-    exit 0' > /etc/init.d/firewall
+$IPT -A INPUT -i lo -j ACCEPT
+$IPT -A INPUT -j attacks
+$IPT -A INPUT -j invalid
+$IPT -A INPUT -j allowed
+
+$IPT -A OUTPUT -p icmp -j DROP
+
+$IPT-save
+
+exit 0
+    ' > /etc/init.d/firewall
 
     chown root /etc/init.d/firewall
     chmod 750 /etc/init.d/firewall
@@ -179,7 +189,20 @@ if echo "$answer" | grep -iq "^y" ;then
     printer-driver-pxljr printer-driver-sag-gdi printer-driver-splix \
     samba-common samba-common-bin smbclient telepathy-salut toshset \
     virtuoso-minimal virtuoso-opensource-6.1-bin0 \
-    virtuoso-opensource-6.1-common gufw hexchat pidgin
+    virtuoso-opensource-6.1-common gufw hexchat pidginasymptote-doc \
+    bluez-obexd brackets cabextract cheese cheese-common ompiz compiz-core \
+   compiz-gnome compiz-mate compiz-plugins compiz-plugins-default compton \
+   cups-client cups-common cups-core-drivers cups-daemon \
+cups-filters cups-filters-core-drivers cups-pk-helper cups-ppdc cups-server-common \
+deja-dup-backend-cloudfiles deja-dup-backend-gvfs deja-dup-backend-s3 \
+deja-dup-caja dia dia-common dia-libs dia-shapes evolution-data-server-common \
+exfat-fuse exfat-utils fcrackzip ffmpegthumbnailer gnome-icon-theme-symbolic \
+gnome-orca gvfs-backends ideviceinstaller inxi libcheese-gtk25 libcheese8 \
+libcompizconfig0 libebackend-1.2-10 libebook-1.2-16 libebook-contacts-1.2-2 \
+libedata-book-1.2-25 libedataserver-1.2-21 libpurple-bin libpurple0 libsmbclient lynx \
+lynx-common mate-netbook mate-netbook-common  \
+mate-tweak octave-info octave-nlopt pidgin-data pidgin-otr potrace rarian-compat \
+rhythmbox-data rtorrent samba-libs ttf-mscorefonts-installer ubuntu-mate-welcome
 fi
 
 echo -n "Would you like to install any .deb packages from folder ~/Programs (if any) ? (y/n)? "
