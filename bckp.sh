@@ -24,6 +24,9 @@ if [ -d "$dstdir" ]; then
 
     openssl aes-256-cbc -md sha256 -iv $(cat $dstdir/iv) -in $tmpdir/$filename -out $tmpdir/$filename.enc
 
+    # to decrypt:
+    # openssl aes-256-cbc -d -md sha256 -iv $dstdir/iv -in $tmpdir/$filename.enc -out $tmpdir/$filename
+
     rm -f $tmpdir/$filename
 
     mv $tmpdir/$filename.enc $dstdir/$filename.enc
