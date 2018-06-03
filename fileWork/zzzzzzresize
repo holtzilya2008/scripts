@@ -1,0 +1,8 @@
+#!/bin/bash
+#
+# Resize all .jpg and .png files that are larger then 1M by 50%
+# this script can be extended from here
+# Requies imagemagick
+
+  find . -type f -size +1M -name "*.png" -exec convert -resize 50% {} {} \;
+  find . -type f -size +1M -name "*.jpg" -exec convert -resize 50% {} {} \;

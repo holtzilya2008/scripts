@@ -1,0 +1,3 @@
+# Create process whitelist here
+# The simplest way, use a screenshot of a clean system:
+# ps -eo comm > ./whitelist.txt

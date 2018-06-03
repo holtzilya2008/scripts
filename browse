@@ -1,7 +1,10 @@
 #!/bin/bash
 #
-#This script will launch my prefered browser form with a url givven as $1
-#
+# A simple command to  open a website on my favorite browser.
+# Was useful for me when binding with a shortcut key.
+# e.g. Ctrl-Alt-g will open google.com on your favorite browser.
+# In case you want to switch to another browser you can only change the browser
+# name here and don't need to modify your keyboard shortcuts on your DE
 
 browser="firefox"
 $browser $1

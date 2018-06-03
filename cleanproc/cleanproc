@@ -1,0 +1,9 @@
+#! /bin/bash
+
+# This script list all processes on the system using ps command, 
+# and then checks each process if it exists in the whitelist.
+# The "watch -n1" command is optional but recommended. This way the 
+# script updates every 1 second.
+
+checkproc_path="...full path for checkproc.sh script..."
+watch -n1 "ps -eo comm | $checkproc_path/checkproc.sh"

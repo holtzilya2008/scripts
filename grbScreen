@@ -1,4 +1,10 @@
 #!/bin/bash
+#
+# A simple command to grab a desired area on the screen and save 
+# it as a .png file with todays nate and time.
+# Very useful with when binding with a shortcut key.
+# Requies "gnome-screenshot"
+
 _now=$(date +"%Y%m%d_%H%M%S")
 _file="screens/scr$_now.png"
 gnome-screenshot -a -f $_file 
