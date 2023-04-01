@@ -1,0 +1,72 @@
+#!/bin/bash
+
+# Default values
+OUTPUT_FILE=~/tmp/repeated.log
+MAX_REPEAT=100
+INTERVAL=600 # 10 minutes in seconds
+
+usage() {
+  echo "Usage: $0 [OPTIONS] <command>"
+  echo ""
+  echo "Options:"
+  echo "  --out=<file>      Set the output file to append results to (default: ~/tmp/amd.log)"
+  echo "  -n=<count>        Set the number of times the command should be repeated (default: 100)"
+  echo "  --interval=<secs> Set the interval between command executions in seconds (default: 600)"
+  echo "  -h                Show this help message and exit"
+  echo ""
+  echo "Example:"
+  echo "  $0 --out=\"/home/myself/docs/123.tmp\" -n=25 --interval=1000 \"history | grep 123\""
+  echo "  $0 --out=\"/home/ilya/tmp/speedtest.log\" -n=100 --interval=300 \"speedtest-cli\""
+}
+
+# Parse options
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --out=*)
+      OUTPUT_FILE="${1#*=}"
+      shift
+      ;;
+    -n=*)
+      MAX_REPEAT="${1#*=}"
+      shift
+      ;;
+    --interval=*)
+      INTERVAL="${1#*=}"
+      shift
+      ;;
+    -h)
+      usage
+      exit 0
+      ;;
+    *)
+      if [ -z "$COMMAND" ]; then
+        COMMAND="$1"
+        shift
+      else
+        echo "Error: Invalid option or too many arguments"
+        echo ""
+        usage
+        exit 1
+      fi
+      ;;
+  esac
+done
+
+# Check if the command is provided
+if [ -z "$COMMAND" ]; then
+  echo "Error: Missing command"
+  echo ""
+  usage
+  exit 1
+fi
+
+# Create the output file directory if it doesn't exist
+mkdir -p "$(dirname "$OUTPUT_FILE")"
+
+# Run the command and append the result to the output file
+COUNTER=0
+while [ $COUNTER -lt $MAX_REPEAT ]; do
+  eval "$COMMAND" | tee -a "$OUTPUT_FILE"
+  sleep $INTERVAL
+  COUNTER=$((COUNTER + 1))
+done
