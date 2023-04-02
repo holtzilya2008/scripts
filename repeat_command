@@ -66,6 +66,7 @@ mkdir -p "$(dirname "$OUTPUT_FILE")"
 # Run the command and append the result to the output file
 COUNTER=0
 while [ $COUNTER -lt $MAX_REPEAT ]; do
+  echo -e "\n------ $(date) --- ITERATION ${COUNTER} --- COMMAND ${COMMAND} ------\n" | tee -a "$OUTPUT_FILE"
   eval "$COMMAND" | tee -a "$OUTPUT_FILE"
   sleep $INTERVAL
   COUNTER=$((COUNTER + 1))
