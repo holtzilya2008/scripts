@@ -2,4 +2,4 @@
 #
 # A simple command for AES-cbc (256) encription of a file, using openssl
 
-openssl aes-256-cbc -in $1 -out $2
+openssl aes-256-cbc -pbkdf2 -in $1 -out $2
