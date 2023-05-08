@@ -3,4 +3,4 @@
 # A simple command for AES-cbc decription of a file, using openssl
 #
 
-openssl aes-256-cbc -d -in $1 -out $2
+openssl aes-256-cbc -d -pbkdf2 -in $1 -out $2
