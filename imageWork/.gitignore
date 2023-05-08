@@ -1,7 +1,7 @@
-*.swp
 .idea/
 __pycache__/
 .cache
 *.pyc
+*.svg
 *.pytest_cache/
 venv/
