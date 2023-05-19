@@ -26,3 +26,8 @@ snap install code --classic
 
 echo "Installing htop..."
 aptitude install htop -y
+
+echo "Installing copyq..."
+add-apt-repository ppa:hluk/copyq
+aptitude update
+aptitude install copyq
