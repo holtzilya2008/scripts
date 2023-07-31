@@ -18,7 +18,7 @@ def create_cells_svg(num_cells, filename):
     dwg = svgwrite.Drawing(filename, size=(width, height), profile='tiny')
 
     # Draw a white background rectangle
-    dwg.add(dwg.rect(insert=(0, 0), size=(width, height), fill='grey'))
+    dwg.add(dwg.rect(insert=(0, 0), size=(width, height), fill='brown'))
 
     # Draw the cells
     for row in range(rows):
