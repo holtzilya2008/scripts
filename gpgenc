@@ -1,0 +1,18 @@
+#!/bin/bash
+#
+# A simple command for AES-256 encryption of a file, using gpg
+
+# Check if the correct number of arguments is passed
+if [ "$#" -ne 2 ]; then
+    echo "Usage: $0 <input_file> <output_file>"
+    exit 1
+fi
+
+# Check if the input file exists
+if [ ! -f "$1" ]; then
+    echo "Error: The file '$1' does not exist."
+    exit 1
+fi
+
+echo Encrypting "$1" into "$2" ...
+gpg --symmetric --cipher-algo AES256 --output "$2" --verbose "$1"
