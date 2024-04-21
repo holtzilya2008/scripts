@@ -16,6 +16,25 @@ for subdir in "$path"/*/; do
     echo "proccessing $base_name"
     du $base_name -h > ./$base_name.du
     ls -lRa $base_name > ./$base_name.ls
+    versions_file="./$base_name.env.md"
+    touch $versions_file
+    echo "# Environment Information \n" > $versions_file
+    echo "" >> $versions_file
+    echo "\`\`\`" >> $versions_file
+    lsb_release -a >> $versions_file
+    echo "\`\`\`" >> $versions_file
+    echo "" >> $versions_file
+    echo "---" >> $versions_file
+    echo "" >> $versions_file
+    echo "\`\`\`" >> $versions_file
+    tar --version >> $versions_file
+    echo "\`\`\`" >> $versions_file
+    echo "" >> $versions_file
+    echo "---" >> $versions_file
+    echo "" >> $versions_file
+    echo "\`\`\`" >> $versions_file
+    gpg --version >> $versions_file
+    echo "\`\`\`" >> $versions_file
   fi
 done
 
