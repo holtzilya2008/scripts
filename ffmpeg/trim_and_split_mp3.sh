@@ -33,7 +33,7 @@ for input_file in *.mp3; do
     base_name="${input_file%.*}"
 
     # Define the trimmed file name (output from trim_silence.sh)
-    trimmed_file="${base_name}_trimmed.mp3"
+    trimmed_file="${base_name}_tr.mp3"
 
     # Check if the trimmed file exists
     if [ -f "$trimmed_file" ]; then
@@ -42,7 +42,8 @@ for input_file in *.mp3; do
         # Split the trimmed file using split_large_media.sh
         ./split_large_media.sh "$trimmed_file"
     else
-        echo "Error: Trimmed file $trimmed_file was not created."
+        echo "Trimmed file $trimmed_file was not created. Splitting Original file:"
+        ./split_large_media.sh "$input_file"
     fi
 done
 

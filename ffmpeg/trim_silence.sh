@@ -46,7 +46,7 @@ echo "Silence detected at $silence_start seconds."
 silence_start_rounded=$(printf "%.0f" "$silence_start")
 
 # Trim the file up to the detected silence start
-output_file="${input_file%.*}_trimmed.mp3"
+output_file="${input_file%.*}_tr.mp3"
 ffmpeg -i "$input_file" -t "$silence_start_rounded" -acodec copy "$output_file"
 
 echo "Trimmed file saved as $output_file"
