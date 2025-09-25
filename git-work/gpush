@@ -1,0 +1,14 @@
+#!/bin/bash
+#
+# A shortcut to 
+# git add, commit, push with a commit message
+# Usage: gpush "commit message"
+
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 \"commit message\""
+    exit 1
+fi
+
+git add --all .
+git commit -m "$1"
+git push
