@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -o errexit
+set -o pipefail
+
+if [[ $# -ne 1 ]]; then
+    echo "Usage: jsonvalidate <file.json>" >&2
+    exit 2
+fi
+
+FILE="$1"
+
+if [[ ! -f "$FILE" ]]; then
+    echo "File not found: $FILE" >&2
+    exit 2
+fi
+
+if python3 -m json.tool "$FILE" >/dev/null 2>&1; then
+    echo "Valid JSON"
+    exit 0
+else
+    echo "Invalid JSON"
+    exit 1
+fi
